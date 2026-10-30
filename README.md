@@ -131,4 +131,4 @@ dev/                  结构预览页
 
 ## 许可
 
-（待定：如无特别说明，默认保留所有权利。）
+[MIT](LICENSE) © galizhajidanbaofan
