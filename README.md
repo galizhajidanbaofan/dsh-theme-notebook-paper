@@ -73,6 +73,21 @@
 
 卸载：`plugin_manager action=remove_bundle target=dsh-theme-notebook-paper`，然后刷新窗口。
 
+### 从插件市场安装
+
+本仓库同时提供了插件市场索引，Harness 内可直接装：
+
+1. 打开 **插件 → 发现**，点 **添加索引源**
+2. 粘贴：
+
+   ```
+   https://raw.githubusercontent.com/galizhajidanbaofan/dsh-theme-notebook-paper/main/market/index.json
+   ```
+
+3. 列表里出现「笔记本主题」后点 **安装**，重启窗口生效。
+
+市场条目装的是 Git 源（按下述索引文件里的 commit 固定），与上面的 `git clone` 软链安装二选一即可，装的是同一个包。
+
 ## 设置
 
 ![设置面板](docs/settings.png)
