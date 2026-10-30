@@ -81,12 +81,14 @@
 2. 粘贴：
 
    ```
-   https://raw.githubusercontent.com/galizhajidanbaofan/dsh-theme-notebook-paper/main/market/index.json
+   https://cdn.jsdelivr.net/gh/galizhajidanbaofan/dsh-theme-notebook-paper@main/market/index.json
    ```
 
 3. 列表里出现「笔记本主题」后点 **安装**，重启窗口生效。
 
 市场条目装的是 Git 源（按下述索引文件里的 commit 固定），与上面的 `git clone` 软链安装二选一即可，装的是同一个包。
+
+> 索引本身也放在仓库里（`market/index.json`），原始地址是 `https://raw.githubusercontent.com/galizhajidanbaofan/dsh-theme-notebook-paper/main/market/index.json`。上面给的是 jsDelivr 镜像：有些网络里 Harness 的 Host（Node）抓 `github.com` / `raw.githubusercontent.com` 会报 `unable to verify the first certificate`，而 jsDelivr 走的是普通公共证书链，能正常读取。两条地址的内容一致，任选其一。
 
 ## 设置
 
