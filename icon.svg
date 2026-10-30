@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Notebook paper">
+  <rect x="7" y="5" width="50" height="54" rx="5" fill="#faf9f6" stroke="#1a2a4a" stroke-width="2.6"/>
+  <path d="M20 12v40" stroke="#c0392b" stroke-width="2.4" stroke-linecap="round"/>
+  <g stroke="#1a2a4a" stroke-width="1.7" stroke-linecap="round" opacity="0.85">
+    <path d="M26 18h24"/>
+    <path d="M26 27h24"/>
+    <path d="M26 36h19"/>
+    <path d="M26 45h22"/>
+  </g>
+  <path d="M26 54c4-1 7 1 11 0" stroke="#c0392b" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>
