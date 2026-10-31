@@ -47,7 +47,7 @@
 
 ## 安装
 
-前置：已安装 **DeepSeek Harness 桌面端**。插件只在桌面端生效，切到 `dsh web` 不会加载这些样式。
+前置：已安装 **DeepSeek Harness 桌面端**。插件只装进桌面端 profile（Desktop profile），因此 `dsh web` 用默认 profile 启动时不会带这些样式；若在同一 profile 下跑 `dsh web`，样式同样会生效——这是主题本身的样式，没有为 Web 端做额外适配。
 
 1. 克隆仓库到本地任意目录：
 
