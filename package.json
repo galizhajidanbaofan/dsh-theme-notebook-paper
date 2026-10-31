@@ -34,7 +34,9 @@
     "locale/en.json",
     "icon.svg",
     "README.md",
-    "docs/IMPLEMENTATION.md"
+    "docs/IMPLEMENTATION.md",
+    "assets/icon-180.png",
+    "screenshots.json"
   ],
   "dsh": {
     "bundle": {
