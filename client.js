@@ -66,7 +66,7 @@ window.__ModuleLoader__.load({
 
     /** 头像注入锚点：用户行 + 助手回合行（排除推理段）。 */
     const AVATAR_HOST =
-      '[data-chat-flow-kind="user"], [data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"])'
+      ':is([data-chat-flow-kind="user"], [data-chat-flow-kind="steering"]), [data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"]), [class*="_userRow"][data-submission-echo]'
 
     /* ────────────────────────────────────────────── 文案 ── */
 
@@ -713,17 +713,22 @@ window.__ModuleLoader__.load({
       '}',
 
       /* ── 消息气泡：白底 + 手绘勾线 ── */
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"],',
+      'html[data-dsh-notebook] :is([data-chat-flow-kind="user"], [data-chat-flow-kind="steering"]),',
       'html[data-dsh-notebook] [data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"]) {',
       '  position: relative;',
       '  box-sizing: border-box;',
       '}',
-      'html[data-dsh-notebook][data-np-avatar="on"] [data-chat-flow-kind="user"] { padding-inline-end: var(--np-gutter); }',
+      'html[data-dsh-notebook][data-np-avatar="on"] :is([data-chat-flow-kind="user"], [data-chat-flow-kind="steering"]) { padding-inline-end: var(--np-gutter); }',
       'html[data-dsh-notebook][data-np-avatar="on"] [data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"]) {',
       '  margin-inline-start: calc(var(--np-avatar-size) + 16px);',
       '}',
+      /* 待发送回声（steering/user 提交的本地回声）：行自身让出右侧头像位 */
+      'html[data-dsh-notebook][data-np-avatar="on"] [class*="_userRow"][data-submission-echo] {',
+      '  position: relative;',
+      '  padding-inline-end: var(--np-gutter);',
+      '}',
       /* 用户气泡 */
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"] [class*="_bubble"] {',
+      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"] {',
       '  position: relative;',
       '  background-color: var(--np-card) !important;',
       '  background-image: var(--np-grain) !important;',
@@ -731,7 +736,7 @@ window.__ModuleLoader__.load({
       '  color: var(--np-text);',
       '  box-shadow: none !important;',
       '}',
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"] [class*="_bubble"]::after {',
+      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"]::after {',
       '  content: "";',
       '  position: absolute;',
       '  inset: -8px;',
@@ -743,11 +748,11 @@ window.__ModuleLoader__.load({
       '  pointer-events: none;',
       '}',
       /* 用户气泡 hover：文字略上移 + 波浪线画出 */
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"] [class*="_bubble"] {',
+      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"] {',
       '  transition: transform 0.18s ease-out;',
       '}',
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"]:hover [class*="_bubble"] { transform: translateY(-1px); }',
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"] [class*="_bubble"]::before {',
+      'html[data-dsh-notebook] [class*="_userRow"]:hover [class*="_bubble"] { transform: translateY(-1px); }',
+      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"]::before {',
       '  content: "";',
       '  position: absolute;',
       '  left: 16px;',
@@ -761,7 +766,7 @@ window.__ModuleLoader__.load({
       '  transition: clip-path 0.3s ease-out;',
       '  pointer-events: none;',
       '}',
-      'html[data-dsh-notebook] [data-chat-flow-kind="user"]:hover [class*="_bubble"]::before { clip-path: inset(0 0 0 0); }',
+      'html[data-dsh-notebook] [class*="_userRow"]:hover [class*="_bubble"]::before { clip-path: inset(0 0 0 0); }',
       /* 助手回合：白色卡片 + 手绘勾线 */
       'html[data-dsh-notebook] [data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"]) {',
       '  background-color: var(--np-card) !important;',
@@ -950,7 +955,8 @@ window.__ModuleLoader__.load({
 
       for (const host of collectAvatarHosts(doc)) {
         const existing = host.querySelector(':scope > [data-np-avatar-node]')
-        const role = host.getAttribute('data-chat-flow-kind') === 'user' ? 'user' : 'assistant'
+        const kind = host.getAttribute('data-chat-flow-kind')
+        const role = kind === 'user' || kind === 'steering' || host.hasAttribute('data-submission-echo') ? 'user' : 'assistant'
         if (existing) {
           if (existing.getAttribute('data-np-avatar-node') !== role) existing.setAttribute('data-np-avatar-node', role)
           continue

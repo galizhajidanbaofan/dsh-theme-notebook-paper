@@ -62,11 +62,12 @@ html[data-dsh-notebook] div:has(> [data-shell-overlay]) {
 3. **插槽出口是 `display: contents`**。`[data-slot="..."]` 只是包装，不能给它设背景或边框，只能当 `:has()` 锚点。
 4. **输入框不是 textarea**。编辑器是 Lexical（`[data-lexical-editor]`），锚点是「类名含 `_card` 且内有 Lexical 编辑器」的卡片。
 5. **侧栏大框跨两个兄弟节点**。`nav._panelList` 与 `._regionArea` 没有共同父级，框由脚本量出两者 rect 的并集、注入绝对定位的 `[data-np-frame]`，在 rAF 里跟随布局更新；`z-index: -1` + 侧栏根 `isolation: isolate` 让纸底垫在所有行下面，折叠时隐藏。
+6. **「我的」气泡不止 `data-chat-flow-kind="user"`**。中途插话的 steering 行是 `data-chat-flow-kind="steering"`，但它和用户行共用同一个 `UserStyleBubble`（`MessageItem` 的 `.userRow`）；还没落盘的回声行连 kind 都没有，只有 `data-submission-echo` / `data-pending-steering`。所以气泡白卡与手绘框按 `[class*="_userRow"] [class*="_bubble"]` 命中（三种都在内），只有「让出头像位」那几条按 kind 写，回声行单独补一条。
 
 ## 头像注入
 
 - `MutationObserver`（`childList` + `subtree`）+ `requestAnimationFrame` 合并刷新
-- 给 `[data-chat-flow-kind="user"]` 与 `[data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"])` 补 `<span data-np-avatar-node="user|assistant">`
+- 给 `:is([data-chat-flow-kind="user"], [data-chat-flow-kind="steering"])`、`[class*="_userRow"][data-submission-echo]` 与 `[data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"])` 补 `<span data-np-avatar-node="user|assistant">`（角色判定：kind 为 `user`/`steering` 或带 `data-submission-echo` 即「我的」）
 - 头像节点属性名与根节点开关（`data-np-avatar="on"`）刻意区分，清理循环还会跳过 `document.documentElement`——否则会把 `<html>` 整个删掉
 - 两张图分别写进根节点 CSS 变量 `--np-avatar-user-image` / `--np-avatar-assistant-image`，未导入时退回默认灰白渐变
 - 助手侧用 `margin-inline-start` 而不是 `padding-inline-start`，让头像落在手绘框外面
