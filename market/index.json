@@ -66,12 +66,12 @@
       },
       "versions": [
         {
-          "version": "1.0.0",
-          "publishTimestamp": 1761840000,
+          "version": "1.0.1",
+          "publishTimestamp": 1762502400,
           "source": {
             "type": "git",
             "url": "https://github.com/galizhajidanbaofan/dsh-theme-notebook-paper",
-            "commit": "dc4fcd0c85a623e454138df0acf37fe9c3d24975"
+            "commit": "d2584e13293658f86756f3b9f6748a71c171f015"
           }
         }
       ]
