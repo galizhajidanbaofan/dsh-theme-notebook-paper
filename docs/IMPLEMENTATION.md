@@ -38,7 +38,18 @@ html[data-dsh-notebook] div:has(> [data-shell-overlay]) {
 }
 ```
 
-中间的会话容器、滚动区、侧栏根一律透明（宿主 `.an3WzG_root`、`.wtg9ga_root` 自带不透明底，用 `:has([data-conversation-region])` / `*:has([role="tree"])` 沿祖先链清掉）。
+frame 的每个直接子层（`sidebarCol` / `centerCol` / `rightbarCol` / `bottomRow`）一律透明，再往下由 `:has([data-conversation-region])` / `*:has([role="tree"])` 沿祖先链清掉会话容器与侧栏根的自带底色：
+
+```css
+html[data-dsh-notebook] div:has(> [data-shell-overlay]) > *:not([data-shell-overlay]):not([data-shell-leading]):not([data-sidebar-mask]):not([class*="_drawerMask"]) {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+```
+
+排除 `_drawerMask` 是为了保住新版本「侧栏抽屉」的遮罩：它自带 `background: var(--dsw-alias-bg-mask-1)` 与 `backdrop-filter`，被清成透明后抽屉打开时就没有压暗效果了。
+
+> 只按「`div:has(> [data-slot="main"])` 就是中间列」来清透明是脆的：DSH 后来把中间列改成 `centerCol > .mP3x-q_mainPanel > [data-slot="main"]`，那条选择器于是只命中 `.mainPanel`，真正带不透明底的 `centerCol` 逃掉了 —— 现象就是「整页纸色，但一条横线都没有」。改成「frame 的直接子层全部透明」后与嵌套深浅解耦。
 
 > 早先的做法是「每一层都铺同一张 fixed 纸」，在非整数 DPR 下会因为像素对不齐叠出粗细不匀的横线，已弃用。
 
@@ -62,7 +73,8 @@ html[data-dsh-notebook] div:has(> [data-shell-overlay]) {
 3. **插槽出口是 `display: contents`**。`[data-slot="..."]` 只是包装，不能给它设背景或边框，只能当 `:has()` 锚点。
 4. **输入框不是 textarea**。编辑器是 Lexical（`[data-lexical-editor]`），锚点是「类名含 `_card` 且内有 Lexical 编辑器」的卡片。
 5. **侧栏大框跨两个兄弟节点**。`nav._panelList` 与 `._regionArea` 没有共同父级，框由脚本量出两者 rect 的并集、注入绝对定位的 `[data-np-frame]`，在 rAF 里跟随布局更新；`z-index: -1` + 侧栏根 `isolation: isolate` 让纸底垫在所有行下面，折叠时隐藏。
-6. **「我的」气泡不止 `data-chat-flow-kind="user"`**。中途插话的 steering 行是 `data-chat-flow-kind="steering"`，但它和用户行共用同一个 `UserStyleBubble`（`MessageItem` 的 `.userRow`）；还没落盘的回声行连 kind 都没有，只有 `data-submission-echo` / `data-pending-steering`。所以气泡白卡与手绘框按 `[class*="_userRow"] [class*="_bubble"]` 命中（三种都在内），只有「让出头像位」那几条按 kind 写，回声行单独补一条。
+6. **「我的」气泡不止 `data-chat-flow-kind="user"`**。中途插话的 steering 行是 `data-chat-flow-kind="steering"`，但它和用户行共用同一个 `UserStyleBubble`（`MessageItem` 的 `.userRow`）；还没落盘的回声行连 kind 都没有，只有 `data-submission-echo` / `data-pending-steering`。所以气泡白卡与手绘框按 `[class*="_userRow"] :is([class*="_bubble"], [data-message-bubble])` 命中（三种都在内），只有「让出头像位」那几条按 kind 写，回声行单独补一条。
+7. **气泡本体后来搬进了 primitives**。DSH 改用 `primitives.UserMessageBubble` 渲染气泡，元素上带 `data-message-bubble` 但类名不再保证含 `_bubble`。锚点写成 `:is([class*="_bubble"], [data-message-bubble])` 两头兜住。
 
 ## 头像注入
 

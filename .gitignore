@@ -5,3 +5,4 @@ dev/notebook.css
 *.log
 .DS_Store
 Thumbs.db
+_ref_new/

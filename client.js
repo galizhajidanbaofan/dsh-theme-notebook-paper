@@ -502,9 +502,16 @@ window.__ModuleLoader__.load({
       '  background-repeat: repeat !important;',
       '  background-attachment: fixed !important;',
       '}',
+      /* frame 的每个直接子层（侧栏列 / 中间列 / 右栏 / 底栏）一律透明，
+         横线只从 frame 那一层透上来；不依赖槽位嵌套深浅。 */
+      'html[data-dsh-notebook] div:has(> [data-shell-overlay]) > *:not([data-shell-overlay]):not([data-shell-leading]):not([data-sidebar-mask]):not([class*="_drawerMask"]) {',
+      '  background-color: transparent !important;',
+      '  background-image: none !important;',
+      '}',
       /* 其余各层一律透明：横线只从 frame 透上来 */
       'html[data-dsh-notebook] div:has(> [data-slot="sidebar"]),',
       'html[data-dsh-notebook] div:has(> [data-slot="main"]),',
+      'html[data-dsh-notebook] [class*="_mainPanel"],',
       'html[data-dsh-notebook] [data-rightbar-col],',
       'html[data-dsh-notebook] [data-shell-bottom],',
       'html[data-dsh-notebook] [data-slot="main"] > *,',
@@ -728,7 +735,7 @@ window.__ModuleLoader__.load({
       '  padding-inline-end: var(--np-gutter);',
       '}',
       /* 用户气泡 */
-      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"] {',
+      'html[data-dsh-notebook] [class*="_userRow"] :is([class*="_bubble"], [data-message-bubble]) {',
       '  position: relative;',
       '  background-color: var(--np-card) !important;',
       '  background-image: var(--np-grain) !important;',
@@ -736,7 +743,7 @@ window.__ModuleLoader__.load({
       '  color: var(--np-text);',
       '  box-shadow: none !important;',
       '}',
-      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"]::after {',
+      'html[data-dsh-notebook] [class*="_userRow"] :is([class*="_bubble"], [data-message-bubble])::after {',
       '  content: "";',
       '  position: absolute;',
       '  inset: -8px;',
@@ -748,11 +755,11 @@ window.__ModuleLoader__.load({
       '  pointer-events: none;',
       '}',
       /* 用户气泡 hover：文字略上移 + 波浪线画出 */
-      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"] {',
+      'html[data-dsh-notebook] [class*="_userRow"] :is([class*="_bubble"], [data-message-bubble]) {',
       '  transition: transform 0.18s ease-out;',
       '}',
-      'html[data-dsh-notebook] [class*="_userRow"]:hover [class*="_bubble"] { transform: translateY(-1px); }',
-      'html[data-dsh-notebook] [class*="_userRow"] [class*="_bubble"]::before {',
+      'html[data-dsh-notebook] [class*="_userRow"]:hover :is([class*="_bubble"], [data-message-bubble]) { transform: translateY(-1px); }',
+      'html[data-dsh-notebook] [class*="_userRow"] :is([class*="_bubble"], [data-message-bubble])::before {',
       '  content: "";',
       '  position: absolute;',
       '  left: 16px;',
@@ -766,7 +773,7 @@ window.__ModuleLoader__.load({
       '  transition: clip-path 0.3s ease-out;',
       '  pointer-events: none;',
       '}',
-      'html[data-dsh-notebook] [class*="_userRow"]:hover [class*="_bubble"]::before { clip-path: inset(0 0 0 0); }',
+      'html[data-dsh-notebook] [class*="_userRow"]:hover :is([class*="_bubble"], [data-message-bubble])::before { clip-path: inset(0 0 0 0); }',
       /* 助手回合：白色卡片 + 手绘勾线 */
       'html[data-dsh-notebook] [data-chat-flow-kind="assistant-step"]:not([data-chat-group-part="reasoning"]) {',
       '  background-color: var(--np-card) !important;',
