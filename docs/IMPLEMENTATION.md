@@ -75,6 +75,7 @@ html[data-dsh-notebook] div:has(> [data-shell-overlay]) > *:not([data-shell-over
 5. **侧栏大框跨两个兄弟节点**。`nav._panelList` 与 `._regionArea` 没有共同父级，框由脚本量出两者 rect 的并集、注入绝对定位的 `[data-np-frame]`，在 rAF 里跟随布局更新；`z-index: -1` + 侧栏根 `isolation: isolate` 让纸底垫在所有行下面，折叠时隐藏。
 6. **「我的」气泡不止 `data-chat-flow-kind="user"`**。中途插话的 steering 行是 `data-chat-flow-kind="steering"`，但它和用户行共用同一个 `UserStyleBubble`（`MessageItem` 的 `.userRow`）；还没落盘的回声行连 kind 都没有，只有 `data-submission-echo` / `data-pending-steering`。所以气泡白卡与手绘框按 `[class*="_userRow"] :is([class*="_bubble"], [data-message-bubble])` 命中（三种都在内），只有「让出头像位」那几条按 kind 写，回声行单独补一条。
 7. **气泡本体后来搬进了 primitives**。DSH 改用 `primitives.UserMessageBubble` 渲染气泡，元素上带 `data-message-bubble` 但类名不再保证含 `_bubble`。锚点写成 `:is([class*="_bubble"], [data-message-bubble])` 两头兜住。
+8. **`@deepseek-ai/dsh-client-ui-user-questions` 是独立的新包**（问答回顾、交互问答卡、计划评审卡），完全不在 chat/conversation 里。回顾卡的行是 `div[data-question-reply]`（不是 `_userRow`），所以气泡的行锚点扩张成 `:is([class*="_userRow"], [data-question-reply])`；两张交互卡分别是 `div[data-question-key] > section` 与 `div[data-plan-review-key] > section`（直接子节点，无需哈希类名），手绘框用 `inset: 2px` 画在卡内——它们带 `overflow: hidden`，`inset: -8px` 会被裁掉。
 
 ## 头像注入
 

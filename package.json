@@ -1,6 +1,6 @@
 {
   "name": "dsh-theme-notebook-paper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "笔记本主题：把 DeepSeek Harness 桌面端铺成横线笔记本纸（朱红竖线分栏、白色手绘勾线气泡、手写批注式交互）",
   "keywords": [
